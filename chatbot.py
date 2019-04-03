@@ -1,5 +1,6 @@
 # coding=utf-8
 import json
+import mercado_libre
 import pprint
 import requests
 import telepot
@@ -10,6 +11,7 @@ import urllib
 
 class Chatbot():
     TOKEN = "639639336:AAEQMqogeObn3k0Y9ztD2L-GshGJdzcekr4"
+    mercado_libre = None
     # URL = "https://api.telegram.org/bot" + TOKEN
 
     def manageMessage(self, msg):
@@ -24,7 +26,9 @@ class Chatbot():
 
         self.bot = telepot.Bot(self.TOKEN)
         print("getting updates")
-        MessageLoop(self.bot, self.manageMessage).run_as_thread()
+        self.mercado_libre = mercado_libre.MercadoLibre()
+        print(self.mercado_libre.searchProduct('chromecast'))
+        # MessageLoop(self.bot, self.manageMessage).run_as_thread()
 
         while True:
             time.sleep(5)
