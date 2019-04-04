@@ -20,5 +20,17 @@ class MercadoLibre():
         response = self.meli.get(path=path)
 
         products = json.loads(response.content)
-        output_dict = [i for i in products['results'] if i['currency_id'] == 'USD']
-        return output_dict
+        usd_products = [i for i in products['results'] if i['currency_id'] == 'USD']
+        return usd_products
+
+    def formatJSON(self, json):
+        products = []
+        for i in range(0, len(json)):
+            productJSON = {}
+            productJSON['link'] = json[i]['permalink']
+            productJSON['price'] = json[i]['price']
+            productJSON['reviews'] = json[i]['reviews']
+            productJSON['photo'] = json[i]['thumbnail']
+            productJSON['title'] = json[i]['title']
+            products.append(productJSON)
+        return products
