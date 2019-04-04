@@ -18,7 +18,7 @@ class Chatbot():
         self.chat_id = chat_id
         self.meli = mercado_libre.MercadoLibre()
         meli_answer = self.meli.formatJSON(self.meli.searchProduct(msg['text']))
-        self.bot.sendMessage(self.chat_id, meli_answer if meli_answer else 'no hay')
+        self.bot.sendMessage(self.chat_id, meli_answer[0] if meli_answer else 'no hay')
         # self.bot.sendMessage(self.chat_id, msg['text'])
         # self.bot.sendPhoto(chat_id, meli_answer[0]['photo']);
 

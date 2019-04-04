@@ -12,8 +12,10 @@ class MercadoLibre():
 
     def __init__(self):
         super(MercadoLibre, self).__init__()
-        self.meli = Meli(client_id=self.CLIENT_ID, client_secret="el secreto", access_token=self.TOKEN, refresh_token=self.TOKEN)
-        params = {'access_token': self.meli.access_token}
+        self.meli = Meli(client_id=self.CLIENT_ID, 
+                        client_secret="el secreto",
+                        access_token=self.TOKEN,
+                        refresh_token=self.TOKEN)
 
     def searchProduct(self, query):
         path = "sites/MLU/search?q=" + query
