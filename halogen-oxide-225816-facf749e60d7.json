@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "halogen-oxide-225816",
+  "private_key_id": "facf749e60d73525a462e95720c042d141aa9c17",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCwh2FIESMftJiA\nk+TWVgdWj7FV4C41lvy1aWn5s4813jPMbKGWGIdEL9r/CdD6iBVDCj1JyeyzQp/9\naXB/UKFwv3Zvlsg6djXBMGQMBp/UxT7Dq1K9bTQ7XsEbsN6aghthJfPOfJ1zTuBd\nX8vWlmnoHW2ezZB4zl1/rTH2KKpMdoEW3zBJ6wFXc+IJLqHaclwaVcbXzq7FYE94\n5XovxS+jgjMX3Xo3E2KSGZfwq/eobQFUhuL+Vt9QbgL0lm9bZd7oIdMkZGaNiRgv\nVDRcRk1prN3YWhpKicDCTGGToxmMcxa81RwOiBjRYmL0H4myI8RXQnoKnCihQvMh\nWMZtWKCtAgMBAAECggEACXjSJvhIbrCViDynSDrofOQL62QyhoyZ9a/40D2qvwSz\nudHQX8nkJCv/L7Uaof7ASU8Y18c+bKX0CLhqIWK1ruOPGtC34K8sFjge/igy1ktZ\nIU2ljGV6Kn9clDxKzXaSuoU7TkaQejnuvwPfX53Fg/9kPOOhz2GfUbT828z1ylFw\nmkM70vMgV0Fzr8sWB5xhL3DlY8PhO/rYz6czH4YPdg7Fx/tSI51zBEbiKdskz8G6\nT+x2deaPuuI5HKiIbp2Vdr5MTS2e1TV1iGA8HPOxgs/boihEg2hZ7Zdr1n1owU3Z\nRy5qZXvM0tPC6ggQW58kzHVRbNho3HSBI5xO5IFzMQKBgQDnD+hWgoDi4M7zLt5v\newtIf26OYhJ4rUyyQXHDaxBhqOpoKv094jCTkZLYPzXyMyH+9zQ1h92qcl180RIW\nQNal0cLqMdqQ405RIhFzjRjjdMdT0ywnPc9cBd/FPXX6dF/qAxLBSqlYMMKrMOT7\n8/st7GaGnF6410X2bbtj0LAQ+QKBgQDDlMDmXCXZIV/jAUcSw2ZKZl9Q31kO5tJd\nTGrik9gmYq3vfRWpbTHSssiZtfPFQZDkUtsvdN7J9xMb0s7aGAv1nVvQDTmlHrll\nHKNukYe5fWfRb4K2UnGRxEwu/32CxxPlj8//sziZ7NbF7+3nWH5jRKrR0ln+2aZi\nk4zlVlhuVQKBgQDkAWCFLVY9ixTsB03buBFUQts3iTMs/eV26Pl3moiZtfNJQ1KN\n5EuG8tlypj13eFmNnSZZxG5KKXxzFGPCrcyh6DFspDFHU+YOTY3m9k6e9LdU0kb5\nmhaqeelsWs+2i2uyIcI6FpCww7z07NSogwNTN7mcD2WxBEy3dWS6hE2ZEQKBgBRt\na/xjcXyNNNOj5YV7LSrmKFxtB4M77oraGWvS30ebFOmnmeSZSBPmoncTfwOCRpzi\nXoxFW6Oij7dfPEWhL1aW+ejwCK5LWDfMVvGMd62TAI3qZK+gSsZbx009WCGZo2Vd\nsO7XDDlfeEsyNRntrz21BVZm7wlkODGhkZy+ePwFAoGBALA7W6W+GcJ8dGwlzqmb\n/9n6/wEf1jBuiQp62knSt2QuMF9UrqoWGDnuKbUzHUW+O2GLD9Wv5a2Q9/CfH11m\nBnlYoX5WcPygNbMz/OS3Kkucm2BIWqdYjE4G1M54QR1fBXfeFonugDMf5y/ZiTdP\nMWKx+EduVCeOWnrnrLYjns7U\n-----END PRIVATE KEY-----\n",
+  "client_email": "dasi-693@halogen-oxide-225816.iam.gserviceaccount.com",
+  "client_id": "103839738986334940142",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/dasi-693%40halogen-oxide-225816.iam.gserviceaccount.com"
+}
