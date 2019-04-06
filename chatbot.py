@@ -8,7 +8,8 @@ import time
 import urllib
 import telepot
 from telepot.loop import MessageLoop
-import dialogflow_v2 as dialogflow
+import dialogflow_v2 as dialogflowAPI
+import dialogflow
 
 DIALOGFLOW_PROJECT_ID = 'halogen-oxide-225816'
 GOOGLE_APPLICATION_CREDENTIALS = 'halogen-oxide-225816-facf749e60d7.json'
@@ -17,7 +18,7 @@ SESSION_ID = 'proyectodasiucm'
 class Chatbot():
 	def __init__(self):
 		TOKEN = '894407782:AAHlyE4ko1wbWlj_oU-utzzBI0weSkC-4Pk'  
-		session_client = dialogflow_v2.SessionsClient()
+		session_client = dialogflowAPI.SessionsClient()
 		session = session_client.session_path(DIALOGFLOW_PROJECT_ID, SESSION_ID)
 		self.userConversation = dialogflow.testingDialogflow()
 		self.bot = telepot.Bot(TOKEN)
