@@ -48,9 +48,10 @@ class Chatbot():
 
 
     def contactMercadoLibre(self, msg):
-        content_type, chat_type, chat_id = telepot.glance(msg)
-        self.chat_id = chat_id
         self.meli = mercado_libre.MercadoLibre()
+        meli_answer = self.meli.formatJSON(self.meli.searchProduct(msg['text']))
+        self.bot.sendMessage(self.chat_id, meli_answer[0] if meli_answer else 'no hay')
+
         # meli_answer = self.meli.formatJSON(self.meli.searchProduct(msg['text']))
         # self.bot.sendMessage(self.chat_id, meli_answer[0] if meli_answer else 'no hay')
         # ============================================================
