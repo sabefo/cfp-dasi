@@ -2,7 +2,11 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+claves
+.DS_Store
+teste.py
+examples/
+python-sdk/
 # C extensions
 *.so
 
