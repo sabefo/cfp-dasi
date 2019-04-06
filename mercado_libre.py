@@ -12,7 +12,7 @@ class MercadoLibre():
 
     def __init__(self):
         super(MercadoLibre, self).__init__()
-        self.meli = Meli(client_id=self.CLIENT_ID, 
+        self.meli = Meli(client_id=self.CLIENT_ID,
                         client_secret="el secreto",
                         access_token=self.TOKEN,
                         refresh_token=self.TOKEN)
