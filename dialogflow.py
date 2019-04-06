@@ -12,16 +12,6 @@ class testingDialogflow:
 		session_client = dialogflow.SessionsClient()
 		session = session_client.session_path(DIALOGFLOW_PROJECT_ID, SESSION_ID)
 
-	def manageMessage(self, msg):
-		content_type, chat_type, chat_id = telepot.glance(msg)
-		self.chat_id = chat_id
-
-		# mensaje del usuario
-		self.message = msg
-
-		print(self.message['text'])
-		print('Hola')
-
 	def detect_intent_texts(self,project_id, session_id, texts, language_code):
 		session_client = dialogflow.SessionsClient()
 		session = session_client.session_path(DIALOGFLOW_PROJECT_ID, SESSION_ID)
