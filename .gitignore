@@ -4,3 +4,5 @@ teste.py
 claves
 .DS_Store
 mercado_libre.pyc
+python-sdk/
+env/
