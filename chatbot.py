@@ -43,8 +43,8 @@ class Chatbot():
 		# mensaje del usuario
 		self.message = msg
 
-		self.userConversation.detect_intent_texts(DIALOGFLOW_PROJECT_ID,SESSION_ID,self.message['text'],'es')
-
+		response = self.userConversation.detect_intent_texts(DIALOGFLOW_PROJECT_ID,SESSION_ID,self.message['text'],'es')
+		self.bot.sendMessage(self.chat_id, response)
 		"""print(self.message['text'])"""
 
 
