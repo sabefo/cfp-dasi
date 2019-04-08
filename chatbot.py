@@ -52,7 +52,6 @@ class Chatbot():
 
 		"""print(self.message['text'])"""
 
-
 	def contactMercadoLibre(self, chat_id,msg):
 		self.meli = mercado_libre.MercadoLibre()
 		self.chat_id = chat_id
@@ -64,10 +63,6 @@ class Chatbot():
 		# self.bot.sendMessage(self.chat_id, meli_answer[0] if meli_answer else 'no hay')
 		# self.bot.sendMessage(self.chat_id, msg)
 		# self.bot.sendPhoto(chat_id, meli_answer[0]['photo']);
-
-
-
-
 
 
 if __name__ == '__main__':
