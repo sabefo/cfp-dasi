@@ -7,13 +7,11 @@ import telepot
 from telepot.loop import MessageLoop
 import time
 import urllib
-import telepot
-from telepot.loop import MessageLoop
 import dialogflow_v2 as dialogflowAPI
 import dialogflow
 import os
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "C:/Users/Gonzalo Machado/Desktop/dasi/cfp-dasi/halogen-oxide-225816-facf749e60d7.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "halogen-oxide-225816-facf749e60d7.json"
 
 DIALOGFLOW_PROJECT_ID = 'halogen-oxide-225816'
 GOOGLE_APPLICATION_CREDENTIALS = 'halogen-oxide-225816-facf749e60d7.json'
