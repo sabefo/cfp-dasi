@@ -1,6 +1,7 @@
 # coding=utf-8
 import json
 import mercado_libre
+import database
 import pprint
 import requests
 import telepot
@@ -29,8 +30,11 @@ class Chatbot():
 		self.bot = telepot.Bot(TOKEN)
 		MessageLoop(self.bot, self.manageMessage).run_as_thread()
 		print('Listening ...')
-
-
+		#-------Prueba de conexion------------
+		# self.db = database.connection()
+		# cursor=self.db.cursor()
+		# cursor.execute("""SELECT * FROM Usuario""")
+		# print(cursor.fetchall())
 		# Keep the program running.
 		while 1:
 			time.sleep(10)

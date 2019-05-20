@@ -14,9 +14,10 @@ import random
 def connection():
     conn = MySQLdb.connect(host= "localhost",
                            user="root",
-                           passwd="",
-                           db="eatbot")
+                           passwd="root",
+                           db="mydb")
     return conn
+
 
 
 def insertUser(listUser): #Le llega una lista con el id del usuario y el nombre del usuario
