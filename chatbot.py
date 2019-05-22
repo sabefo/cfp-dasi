@@ -63,8 +63,6 @@ class Chatbot():
         self.chatBotRules.run()
 
         self.bot.sendMessage(self.chat_id, response["responseText"])
-        # if response["intent"] == "Balance":
-        #     print("PRINT QUE DEBERIA DAR EL BALANCE DE LA CUENTA")
         if response["intent"] == "Compra" and response["allParams"]:
             self.contactMercadoLibre(self.chat_id, response["searchText"])
 
@@ -82,7 +80,7 @@ class Chatbot():
         # self.bot.sendMessage(self.chat_id, msg)
         # self.bot.sendPhoto(chat_id, meli_answer[0]['photo']);
 
-    def responseBalance(self):
+    def responseAccountBalance(self):
         # Dar balance de cuenta al usuario
         self.bot.sendMessage(self.chat_id, 'Aqui debería habrer una funcion que devolviera el balance de la cuenta con código')
 
