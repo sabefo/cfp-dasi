@@ -13,12 +13,13 @@ class ChatBotRules(KnowledgeEngine):
         # quiero el balance
         self.bot.responseAccountBalance()
 
-    @Rule(Fact(intent='Movimiento - Ingreso'))
-    def ruleNotUnderstood(self):
-        # no te entiendo
-        self.bot.responseIncome()
+    @Rule(Fact(intent = 'Movimiento - ingreso'),
+          OR(Fact(intent='Movimiento - gasto')))
+    def ruleInsertMovement(self):
+        # quiero guardar un movimiento
+        self.bot.responseInsertMovement()
 
     @Rule(Fact(intent='Compra'))
     def ruleUserBuys(self):
-        # quiero el balance
+        # quiero comprar algo
         self.bot.responseBuy()
