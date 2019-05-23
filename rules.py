@@ -23,3 +23,13 @@ class ChatBotRules(KnowledgeEngine):
     def ruleUserBuys(self):
         # quiero comprar algo
         self.bot.responseBuy()
+
+    @Rule(Fact(intent='Si'))
+    def ruleUserAgrees(self):
+        # quiero comprar algo
+        self.bot.responseAgrees()
+
+    @Rule(Fact(intent='No'))
+    def ruleUserDisagrees(self):
+        # quiero comprar algo
+        self.bot.responseDisagrees()

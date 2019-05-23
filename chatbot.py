@@ -24,6 +24,8 @@ class Chatbot():
     meli = None
     userConversation = None
     response = None
+    total = None
+    current_item = 0
 
     def __init__(self):
         TOKEN = "639639336:AAEQMqogeObn3k0Y9ztD2L-GshGJdzcekr4" # @Santi
@@ -46,7 +48,6 @@ class Chatbot():
     def manageMessage(self, msg):
         content_type, chat_type, chat_id = telepot.glance(msg)
         self.chat_id = chat_id
-
         # mensaje del usuario
         self.message = msg
 
@@ -65,17 +66,21 @@ class Chatbot():
         self.bot.sendMessage(self.chat_id, self.response["responseText"])
         """print(self.message['text'])"""
 
-    def contactMercadoLibre(self, chat_id, msg):
+    def contactMercadoLibre(self, chat_id, msg, current_item):
+        current_item = 0
         self.meli = mercado_libre.MercadoLibre()
         self.chat_id = chat_id
         meli_answer = self.meli.formatJSON(self.meli.searchProduct(msg))
-        if meli_answer[0]:
-            message = meli_answer[0]["link"] + "\n"
-            message += "Su calificación según los usuarios es " + str(meli_answer[0]["reviews"]["rating_average"]) + "/5"
-            message += " de un total de " + str(meli_answer[0]["reviews"]["total"]) + " evaluaciones" + " \n"
-            message += "Su precio es de: $" + str(meli_answer[0]["price"])
-            self.bot.sendMessage(self.chat_id, message)
-            self.bot.sendPhoto(chat_id, meli_answer[0]["photo"]);
+        self.total = len(meli_answer)
+        print('este es el item ' + str(current_item))
+        print('este es meli ' + str(meli_answer))
+        if meli_answer[current_item]:
+            message = meli_answer[current_item]["link"] + "\n"
+            message += "Su calificación según los usuarios es " + str(meli_answer[current_item]["reviews"]["rating_average"]) + "/5"
+            message += " de un total de " + str(meli_answer[current_item]["reviews"]["total"]) + " evaluaciones" + " \n"
+            message += "Su precio es de: $" + str(meli_answer[current_item]["price"])
+            self.bot.sendMessage(chat_id, message)
+            self.bot.sendPhoto(chat_id, meli_answer[current_item]["photo"]);
             # self.bot.sendMessage(self.chat_id, message, parse_mode= "Markdown")
         else:
             "no hay"
@@ -92,10 +97,18 @@ class Chatbot():
         self.bot.sendMessage(self.chat_id, 'AQUI VA EL BALANCE')
 
     def responseBuy(self):
-        # AYUDA A COMPRAR
+        # Muestra los productos que aparecen en Mercado Libre
         if self.response["allParams"]:
-            self.contactMercadoLibre(self.chat_id, self.response["searchText"])
+            self.contactMercadoLibre(self.chat_id, self.response["searchText"], self.current_item)
         # self.bot.sendMessage(self.chat_id, 'AQUI VAN LAS COMPRAS')
+
+    # def responseAgrees(self):
+    #     self.bot.sendMessage(self.chat_id, 'ESTA DE ACUERDO, HAY QUE METERLO A LA BASE DE DATOS')
+
+    # def responseDisagrees(self):
+    #     self.bot.sendMessage(self.chat_id, 'NO LE GUSTA, HAY QUE MOSTRAR OTRO')
+    #     print(self.response["searchText"])
+    #     self.contactMercadoLibre(self.chat_id, self.response["searchText"], self.current_item + 1)
 
 if __name__ == '__main__':
     chatbot = Chatbot()
