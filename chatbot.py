@@ -1,16 +1,19 @@
 # coding=utf-8
-import dialogflow
-import dialogflow_v2 as dialogflowAPI
 import json
 import mercado_libre
-import os
+import database
 import pprint
-from pyknow import *
 import requests
 import rules
 import telepot
 from telepot.loop import MessageLoop
 import time
+import urllib
+import dialogflow_v2 as dialogflowAPI
+import dialogflow
+import os
+from pyknow import *
+import rules
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "halogen-oxide-225816-facf749e60d7.json"
 
@@ -18,42 +21,47 @@ DIALOGFLOW_PROJECT_ID = 'halogen-oxide-225816'
 GOOGLE_APPLICATION_CREDENTIALS = 'halogen-oxide-225816-facf749e60d7.json'
 SESSION_ID = 'proyectodasiucm'
 
-
 class Chatbot():
-    chatBotRules = None
+    #TOKEN = "639639336:AAEQMqogeObn3k0Y9ztD2L-GshGJdzcekr4" # @Santi
     meli = None
-    userConversation = None
     response = None
+    userConversation = None
+    chatBotRules = None
+    chat_id = None
     total = None
     current_item = 0
 
     def __init__(self):
-        TOKEN = "639639336:AAEQMqogeObn3k0Y9ztD2L-GshGJdzcekr4" # @Santi
-        # TOKEN = '894407782:AAHlyE4ko1wbWlj_oU-utzzBI0weSkC-4Pk' # @Gonzalo
-        self.bot = telepot.Bot(TOKEN)
-
-        MessageLoop(self.bot, self.manageMessage).run_as_thread()
-        print('Listening ...')
-
-        self.chatBotRules = rules.ChatBotRules()
-        self.chatBotRules.setBot(self)
-
+        TOKEN = '894407782:AAHlyE4ko1wbWlj_oU-utzzBI0weSkC-4Pk' # @Gonzalo
         session_client = dialogflowAPI.SessionsClient()
         session = session_client.session_path(DIALOGFLOW_PROJECT_ID, SESSION_ID)
         self.userConversation = dialogflow.testingDialogflow()
-
+        self.bot = telepot.Bot(TOKEN)
+        self.chatBotRules = rules.ChatBotRules()
+        self.chatBotRules.setBot(self)
+        MessageLoop(self.bot, self.manageMessage).run_as_thread()
+        print('Listening ...')
+        #-------Prueba de conexion------------
+        # self.db = database.connection()
+        # cursor=self.db.cursor()
+        # cursor.execute("""SELECT * FROM Usuario""")
+        # print(cursor.fetchall())
+        # Keep the program running.
         while 1:
             time.sleep(10)
+
 
     def manageMessage(self, msg):
         content_type, chat_type, chat_id = telepot.glance(msg)
         self.chat_id = chat_id
+
+        user = [[chat_id, msg['from']['first_name'],msg['from']['last_name']]]
+        database.insertUser(user)
+
         # mensaje del usuario
         self.message = msg
 
-        self.response = self.userConversation.detect_intent_texts(DIALOGFLOW_PROJECT_ID, SESSION_ID, self.message['text'], 'es')
-        print(self.response)
-
+        self.response = self.userConversation.detect_intent_texts(DIALOGFLOW_PROJECT_ID,SESSION_ID,self.message['text'],'es')
         self.chatBotRules.reset()
 
         if self.response['intent'] != '':
@@ -94,7 +102,9 @@ class Chatbot():
 
     def responseAccountBalance(self):
         # Dar balance de cuenta al usuario
-        self.bot.sendMessage(self.chat_id, 'AQUI VA EL BALANCE')
+        print(self.chat_id)
+        balance = database.getOverallBalance(self.chat_id)
+        self.bot.sendMessage(self.chat_id, "Su balance general es de: $%8.2f \nCon un total de: \n %s ingresos. \n %s egresos." %(balance["overall"], balance["ingresos"], balance["egresos"]) )
 
     def responseBuy(self):
         # Muestra los productos que aparecen en Mercado Libre
@@ -109,6 +119,8 @@ class Chatbot():
     #     self.bot.sendMessage(self.chat_id, 'NO LE GUSTA, HAY QUE MOSTRAR OTRO')
     #     print(self.response["searchText"])
     #     self.contactMercadoLibre(self.chat_id, self.response["searchText"], self.current_item + 1)
+
+
 
 if __name__ == '__main__':
     chatbot = Chatbot()
