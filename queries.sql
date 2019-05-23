@@ -1,10 +1,19 @@
+drop table mydb.producto;
+drop table mydb.compra;
+drop table mydb.movimiento;
+drop table mydb.usuario;
+
+
 CREATE TABLE IF NOT EXISTS `mydb`.`Usuario` (
   `idUsuario` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
   `Apellido_1` VARCHAR(45) NOT NULL,
   `Apellido_2` VARCHAR(45) NOT NULL,
   `DNI` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idUsuario`, `DNI`))
+  `telegramUserID` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idUsuario`),
+  UNIQUE INDEX `telegramUserID_UNIQUE` (`telegramUserID` ASC) VISIBLE,
+  UNIQUE INDEX `DNI_UNIQUE` (`DNI` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Compra` (
@@ -59,6 +68,11 @@ ENGINE = InnoDB;
 
 ALTER TABLE `mydb`.`Movimiento` ADD CHECK (  `Tipo` IN ('Ingreso', 'Egreso')) ;
 
-INSERT INTO `mydb`.`Usuario` (`idUsuario`, `Nombre`, `Apellido_1`, `Apellido_2`, `DNI`) VALUES (1, 'Gonzalo', 'Machado', 'Salazar', 'Y7463536A');
-INSERT INTO `mydb`.`Usuario` (`idUsuario`, `Nombre`, `Apellido_1`, `Apellido_2`, `DNI`) VALUES (2, 'Santiago', 'Bermudez', 'Fortes', '12735395A');
+INSERT INTO `mydb`.`Usuario` (`Nombre`, `Apellido_1`, `Apellido_2`, `DNI`, `telegramUserId`) VALUES ('Gonzalo', 'Machado', 'Salazar', 'Y7463536A', '800282905');
+INSERT INTO `mydb`.`Usuario` (`Nombre`, `Apellido_1`, `Apellido_2`, `DNI`, `telegramUserId`) VALUES ('Santiago', 'Bermudez', 'Fortes', '12735395A', '851288992');
 
+
+
+
+
+SELECT sum(CASE Tipo WHEN 'Ingreso' THEN (monto) WHEN 'Egreso' THEN -(monto) END) AS overall_balance, ( select count(tipo) as Ingreso from mydb.movimiento where tipo = 'Ingreso') as Ingreso, (select count(tipo) as Ingreso from mydb.movimiento where tipo = 'Egreso') as Egreso FROM mydb.usuario usuario, mydb.movimiento movimiento where telegramUserID=800282905 and usuario.idUsuario=movimiento.idUsuario_FK ;
