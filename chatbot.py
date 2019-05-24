@@ -26,6 +26,7 @@ class Chatbot():
     response = None
     total = None
     current_item = 0
+    searchText = None
 
     def __init__(self):
         TOKEN = "639639336:AAEQMqogeObn3k0Y9ztD2L-GshGJdzcekr4" # @Santi
@@ -60,11 +61,7 @@ class Chatbot():
 
         if self.response['intent'] != '':
             self.chatBotRules.declare(Fact(intent = self.response['intent']))
-        print('--------------------------------------')
-        print('ESTAMOS VIENDO QUE INTENT VAMOS A USAR')
-        print('--------------------------------------')
         print(self.chatBotRules.facts)
-        print('DF dice: ' + self.response['responseText'])
 
         # ejecutamos el motor de reglas
         self.chatBotRules.run()
@@ -73,25 +70,22 @@ class Chatbot():
         """print(self.message['text'])"""
 
     def contactMercadoLibre(self, chat_id, msg, current_item):
-        current_item = 0
         self.meli = mercado_libre.MercadoLibre()
         self.chat_id = chat_id
         meli_answer = self.meli.formatJSON(self.meli.searchProduct(msg))
         self.total = len(meli_answer)
-        # print('este es el item ' + str(current_item))
+        print('este es el item ' + str(current_item))
         # print('este es meli ' + str(meli_answer))
-        if meli_answer[current_item]:
+        if self.total == 0:
+            "No hay ese tipo de producto"
+        elif current_item <= self.total and meli_answer[current_item]:
             message = meli_answer[current_item]["link"] + "\n"
-            message += "Su calificación según los usuarios es " + str(meli_answer[current_item]["reviews"]["rating_average"]) + "/5"
-            message += " de un total de " + str(meli_answer[current_item]["reviews"]["total"]) + " evaluaciones" + " \n"
+            if meli_answer[current_item]["reviews"]:
+                message += "Su calificación según los usuarios es " + str(meli_answer[current_item]["reviews"]["rating_average"]) + "/5"
+                message += " de un total de " + str(meli_answer[current_item]["reviews"]["total"]) + " evaluaciones" + " \n"
             message += "Su precio es de: $" + str(meli_answer[current_item]["price"])
             self.bot.sendMessage(chat_id, message)
             self.bot.sendPhoto(chat_id, meli_answer[current_item]["photo"]);
-        else:
-            "no hay"
-        # self.bot.sendMessage(self.chat_id, meli_answer[0] if meli_answer else 'no hay')
-        # self.bot.sendMessage(self.chat_id, msg)
-        # self.bot.sendPhoto(chat_id, meli_answer[0]['photo']);
 
     def responseInsertMovement(self):
         # Insertar información de los movimientos del usuario
@@ -104,16 +98,19 @@ class Chatbot():
     def responseBuy(self):
         # Muestra los productos que aparecen en Mercado Libre
         if self.response["allParams"]:
-            self.contactMercadoLibre(self.chat_id, self.response["searchText"], self.current_item)
+            self.searchText = self.response["searchText"]
+            self.current_item = 0
+            print(self.response["searchText"])
+            self.contactMercadoLibre(self.chat_id, self.searchText, self.current_item)
         # self.bot.sendMessage(self.chat_id, 'AQUI VAN LAS COMPRAS')
 
-    # def responseAgrees(self):
-    #     self.bot.sendMessage(self.chat_id, 'ESTA DE ACUERDO, HAY QUE METERLO A LA BASE DE DATOS')
+    def responseAgrees(self):
+        self.bot.sendMessage(self.chat_id, 'ESTA DE ACUERDO, HAY QUE METERLO A LA BASE DE DATOS')
 
-    # def responseDisagrees(self):
-    #     self.bot.sendMessage(self.chat_id, 'NO LE GUSTA, HAY QUE MOSTRAR OTRO')
-    #     print(self.response["searchText"])
-    #     self.contactMercadoLibre(self.chat_id, self.response["searchText"], self.current_item + 1)
+    def responseDisagrees(self):
+        self.bot.sendMessage(self.chat_id, 'NO LE GUSTA, HAY QUE MOSTRAR OTRO')
+        self.current_item += 1
+        self.contactMercadoLibre(self.chat_id, self.searchText, self.current_item)
 
 if __name__ == '__main__':
     chatbot = Chatbot()

@@ -16,12 +16,12 @@ class ChatBotRules(KnowledgeEngine):
     @Rule(Fact(intent='Ingreso'))
     def ruleInsertIncome(self):
         # quiero el balance
-        self.bot.responseInsertMovement()
+        self.bot.responseInsertIncome()
 
     @Rule(Fact(intent='Egreso'))
     def ruleInsertExpense(self):
         # quiero el balance
-        self.bot.responseInsertMovement()
+        self.bot.responseInsertExpense()
 
     @Rule(Fact(intent='Compra'))
     def ruleUserBuys(self):
