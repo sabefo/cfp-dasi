@@ -1,3 +1,4 @@
+-- Archivo con la información del esqueleto de la base de datos
 drop table mydb.producto;
 drop table mydb.compra;
 drop table mydb.movimiento;
@@ -61,8 +62,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Movimiento` (
 ENGINE = InnoDB;
 
 
-
-ALTER TABLE `mydb`.`Movimiento` ADD CHECK (  `Tipo` IN ('Ingreso', 'Egreso')) ;
+ALTER TABLE `mydb`.`Movimiento` ADD CHECK (`Tipo` IN ('Ingreso', 'Egreso')) ;
 
 INSERT INTO `mydb`.`Usuario` (`Nombre`, `Apellido_1`, `Apellido_2`, `DNI`, `telegramUserId`) VALUES ('Gonzalo', 'Machado', 'Salazar', 'Y7463536A', '800282905');
 INSERT INTO `mydb`.`Usuario` (`Nombre`, `Apellido_1`, `Apellido_2`, `DNI`, `telegramUserId`) VALUES ('Santiago', 'Bermudez', 'Fortes', '12735395A', '851288992');

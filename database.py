@@ -1,17 +1,10 @@
 # coding=utf-8
 # http://mysql-python.sourceforge.net/MySQLdb.html
 import MySQLdb
-
-# http://docs.python-requests.org/en/master/
-import requests
-
-# https://docs.python.org/2/library/re.html
-import re
-
-# https://docs.python.org/2/library/random.html
-import random
 import time
 
+
+# Método para conectarse a la base de datos
 def connection():
     conn = MySQLdb.connect(host= "localhost",
                            user="root",
@@ -19,7 +12,7 @@ def connection():
                            db="mydb")
     return conn
 
-
+# Método para insertar un usuario en la base de datos
 def insertUser(listUser):
     conn = connection()
     x = conn.cursor()
@@ -27,7 +20,7 @@ def insertUser(listUser):
         idUser = user[0]
         first_name = user[1]
         last_name = user[2]
-        query = "INSERT IGNORE INTO Usuario (Nombre, apellido_1,telegramUserId) VALUES ('{0}','{1}','{2}');".format(first_name, last_name, idUser)
+        query = "INSERT IGNORE INTO Usuario (Nombre, apellido_1, telegramUserId) VALUES ('{0}','{1}','{2}');".format(first_name, last_name, idUser)
         try:
             x.execute(query)
         except MySQLdb.ProgrammingError:
@@ -37,7 +30,7 @@ def insertUser(listUser):
     x.close()
     conn.close()
 
-
+# Método para regresar la información del balance de cuenta del usuario.
 def getOverallBalance(chat_id):
     balanceInfo = {}
     conn = connection()
@@ -56,7 +49,7 @@ def getOverallBalance(chat_id):
     conn.close()
     return balanceInfo
 
-
+# Método para insertar una transacción de ingreso o egreso a la base de datos
 def insertTransaction(chat_id, transactionType, amount, concept):
     conn = connection()
     x = conn.cursor()
@@ -65,12 +58,11 @@ def insertTransaction(chat_id, transactionType, amount, concept):
         x.execute(query)
     except MySQLdb.ProgrammingError:
         print("La siguiente query ha fallado:%s" % query + '\n')
-        #print("El usuario " + str(first_name)+ ' ' + str(last_name) + " ha sido añadido")
     conn.commit()
     x.close()
     conn.close()
 
-
+# Método para insertar un producto en la base de datos
 def insertProduct(chat_id, name, price):
     conn = connection()
     x = conn.cursor()
@@ -79,7 +71,6 @@ def insertProduct(chat_id, name, price):
         x.execute(query)
     except MySQLdb.ProgrammingError:
         print("La siguiente query ha fallado:%s" % query + '\n')
-        #print("El usuario " + str(first_name)+ ' ' + str(last_name) + " ha sido añadido")
     conn.commit()
     x.close()
     conn.close()

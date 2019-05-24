@@ -3,13 +3,15 @@ import json
 import pprint
 import sys
 sys.path.append('lib/')
+# https://developers.mercadolibre.com/
 from meli import Meli
 
-
+# Clase donde se contempla toda la funcionalida de Mercado Libre, esta es personalizada
 class MercadoLibre():
     CLIENT_ID = 133597087
     TOKEN = "APP_USR-2376600932706705-032210-65f8df0830c4c8fec5bf30c42c479f6e-133597087"
 
+    # Método que inicializa el objeto de Mercado Libre 
     def __init__(self):
         super(MercadoLibre, self).__init__()
         self.meli = Meli(client_id=self.CLIENT_ID,
@@ -17,6 +19,7 @@ class MercadoLibre():
                         access_token=self.TOKEN,
                         refresh_token=self.TOKEN)
 
+    # Método que busca lo que el usuario especificó en Mercado Libre y devuelve las respuestas en dólares
     def searchProduct(self, query):
         path = "sites/MLU/search?q=" + query
         response = self.meli.get(path=path)
@@ -25,6 +28,7 @@ class MercadoLibre():
         usd_products = [i for i in products['results'] if i['currency_id'] == 'USD']
         return usd_products
 
+    # Método que crea un objeto JSON y lo agrupa según las necesidades del sistema
     def formatJSON(self, json):
         products = []
         for i in range(0, len(json)):
