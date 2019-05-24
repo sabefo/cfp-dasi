@@ -10,16 +10,17 @@ import re
 
 # https://docs.python.org/2/library/random.html
 import random
+import time
 
 def connection():
     conn = MySQLdb.connect(host= "localhost",
                            user="root",
-                           passwd="root",
+                           passwd="",
                            db="mydb")
     return conn
 
 
-def insertUser(listUser): #Le llega una lista con el id del usuario y el nombre del usuario
+def insertUser(listUser):
     conn = connection()
     x = conn.cursor()
     for user in listUser:
@@ -55,20 +56,30 @@ def getOverallBalance(chat_id):
     conn.close()
     return balanceInfo
 
-    
-def insertTransaction(listUser): #Le llega una lista con el id del usuario y el nombre del usuario
+
+def insertTransaction(chat_id, transactionType, amount, concept):
     conn = connection()
     x = conn.cursor()
-    for user in listUser:
-        idUser = user[0]
-        first_name = user[1]
-        last_name = user[2]
-        query = "INSERT IGNORE INTO Usuario (Nombre, apellido_1,telegramUserId) VALUES ('{0}','{1}','{2}');".format(first_name, last_name, idUser)
-        try:
-            x.execute(query)
-        except MySQLdb.ProgrammingError:
-            print("La siguiente query ha fallado:%s" % query + '\n')
-        print("El usuario " + str(first_name) + ' ' + str(last_name) + " ha sido añadido")
+    query = "INSERT IGNORE INTO Movimiento (Tipo, Fecha, Monto, Concepto, idUsuario_FK) VALUES ('{0}','{1}','{2}','{3}', '{4}');".format(transactionType, time.strftime("%Y/%m/%d"), int(amount), concept, chat_id)
+    try:
+        x.execute(query)
+    except MySQLdb.ProgrammingError:
+        print("La siguiente query ha fallado:%s" % query + '\n')
+        #print("El usuario " + str(first_name)+ ' ' + str(last_name) + " ha sido añadido")
+    conn.commit()
+    x.close()
+    conn.close()
+
+
+def insertProduct(chat_id, name, price):
+    conn = connection()
+    x = conn.cursor()
+    query = "INSERT IGNORE INTO Producto (idUsuario_FK, Nombre, Precio) VALUES ('{0}','{1}','{2}');".format(chat_id, name[:44], price)
+    try:
+        x.execute(query)
+    except MySQLdb.ProgrammingError:
+        print("La siguiente query ha fallado:%s" % query + '\n')
+        #print("El usuario " + str(first_name)+ ' ' + str(last_name) + " ha sido añadido")
     conn.commit()
     x.close()
     conn.close()

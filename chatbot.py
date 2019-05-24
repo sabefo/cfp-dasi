@@ -22,7 +22,7 @@ GOOGLE_APPLICATION_CREDENTIALS = 'halogen-oxide-225816-facf749e60d7.json'
 SESSION_ID = 'proyectodasiucm'
 
 class Chatbot():
-    #TOKEN = "639639336:AAEQMqogeObn3k0Y9ztD2L-GshGJdzcekr4" # @Santi
+    # TOKEN = "639639336:AAEQMqogeObn3k0Y9ztD2L-GshGJdzcekr4" # @Santi
     meli = None
     response = None
     userConversation = None
@@ -33,10 +33,11 @@ class Chatbot():
     searchText = None
     params = None
     price = 0
+    title = None
 
     def __init__(self):
-        # TOKEN = "639639336:AAEQMqogeObn3k0Y9ztD2L-GshGJdzcekr4" # @Santi
-        TOKEN = '894407782:AAHlyE4ko1wbWlj_oU-utzzBI0weSkC-4Pk' # @Gonzalo
+        TOKEN = "639639336:AAEQMqogeObn3k0Y9ztD2L-GshGJdzcekr4" # @Santi
+        # TOKEN = '894407782:AAHlyE4ko1wbWlj_oU-utzzBI0weSkC-4Pk' # @Gonzalo
         session_client = dialogflowAPI.SessionsClient()
         session = session_client.session_path(DIALOGFLOW_PROJECT_ID, SESSION_ID)
         self.userConversation = dialogflow.testingDialogflow()
@@ -54,10 +55,13 @@ class Chatbot():
         while 1:
             time.sleep(10)
 
-
     def manageMessage(self, msg):
         content_type, chat_type, chat_id = telepot.glance(msg)
         self.chat_id = chat_id
+        # print("------CHAT ID-------")
+        # print(chat_id)
+        # print("--------------------")
+
 
         print(self.chat_id)
         user = [[chat_id, msg['from']['first_name'],msg['from']['last_name']]]
@@ -65,6 +69,7 @@ class Chatbot():
 
         # mensaje del usuario
         self.message = msg
+        self.intents = self.userConversation.get_all_intents()
 
         self.response = self.userConversation.detect_intent_texts(DIALOGFLOW_PROJECT_ID,SESSION_ID,self.message['text'],'es')
         self.chatBotRules.reset()
@@ -74,7 +79,8 @@ class Chatbot():
         print(self.chatBotRules.facts)
 
         # ejecutamos el motor de reglas
-        self.chatBotRules.run()
+        if self.response['allParamsPresent'] != False:
+            self.chatBotRules.run()
 
         self.bot.sendMessage(self.chat_id, self.response["responseText"])
         """print(self.message['text'])"""
@@ -84,8 +90,8 @@ class Chatbot():
         self.chat_id = chat_id
         meli_answer = self.meli.formatJSON(self.meli.searchProduct(msg))
         self.total = len(meli_answer)
-        self.params = self.response["params"]
-        pprint.pprint(meli_answer)
+        self.params = self.response["paramsData"]
+        # pprint.pprint(meli_answer)
         if self.total == 0:
             "No hay ese tipo de producto"
         elif current_item <= self.total and meli_answer[current_item]:
@@ -94,13 +100,22 @@ class Chatbot():
                 message += "Su calificación según los usuarios es " + str(meli_answer[current_item]["reviews"]["rating_average"]) + "/5"
                 message += " de un total de " + str(meli_answer[current_item]["reviews"]["total"]) + " evaluaciones" + " \n"
             message += "Su precio es de: $" + str(meli_answer[current_item]["price"])
+            self.title = meli_answer[current_item]["title"]
             self.price = meli_answer[current_item]["price"]
             self.bot.sendMessage(chat_id, message)
             self.bot.sendPhoto(chat_id, meli_answer[current_item]["photo"]);
 
-    def responseInsertMovement(self):
-        # Insertar información de los movimientos del usuario
-        self.bot.sendMessage(self.chat_id, 'AQUI VAN LOS MOVIMIENTOS')
+    def responseInsertIncome(self):
+        tipo = self.response["paramsData"]["Ingreso"]
+        amount = self.response["paramsData"]["unit-currency"]["amount"]
+        concept = self.response["paramsData"]["Concepto"]
+        database.insertTransaction(self.chat_id, tipo, amount, concept)
+
+    def responseInsertExpense(self):
+        tipo = self.response["paramsData"]["Egreso"]
+        amount = self.response["paramsData"]["unit-currency"]["amount"]
+        concept = self.response["paramsData"]["Concepto"]
+        database.insertTransaction(self.chat_id, tipo, amount, concept)
 
     def responseAccountBalance(self):
         # Dar balance de cuenta al usuario
@@ -110,7 +125,7 @@ class Chatbot():
 
     def responseBuy(self):
         # Muestra los productos que aparecen en Mercado Libre
-        if self.response["allParams"]:
+        if self.response["allParamsPresent"]:
             self.searchText = self.response["searchText"]
             self.current_item = 0
             # print(self.response)
@@ -118,12 +133,21 @@ class Chatbot():
         # self.bot.sendMessage(self.chat_id, 'AQUI VAN LAS COMPRAS')
 
     def responseAgrees(self):
-        print(self.params)
+        tipo = "Egreso"
+        # print(self.response["paramsData"]["unit-currency"]["amount"])
+        amount = self.price
+        concept = self.title
+        database.insertTransaction(self.chat_id, tipo, amount, concept)
+        database.insertProduct(self.chat_id, concept, amount)
         self.bot.sendMessage(self.chat_id, 'ESTA DE ACUERDO, HAY QUE METERLO A LA BASE DE DATOS')
 
     def responseDisagrees(self):
         self.current_item += 1
         self.contactMercadoLibre(self.chat_id, self.searchText, self.current_item)
+
+    def responseGreet(self, nombre):
+        #saludo
+        self.bot.sendMessage(self.chat_id, 'Hola ' + nombre +  '! 😀')
 
 
 if __name__ == '__main__':
