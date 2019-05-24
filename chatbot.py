@@ -48,6 +48,8 @@ class Chatbot():
     def manageMessage(self, msg):
         content_type, chat_type, chat_id = telepot.glance(msg)
         self.chat_id = chat_id
+
+        print(self.chat_id)
         # mensaje del usuario
         self.message = msg
 
@@ -58,7 +60,11 @@ class Chatbot():
 
         if self.response['intent'] != '':
             self.chatBotRules.declare(Fact(intent = self.response['intent']))
+        print('--------------------------------------')
+        print('ESTAMOS VIENDO QUE INTENT VAMOS A USAR')
+        print('--------------------------------------')
         print(self.chatBotRules.facts)
+        print('DF dice: ' + self.response['responseText'])
 
         # ejecutamos el motor de reglas
         self.chatBotRules.run()
@@ -72,8 +78,8 @@ class Chatbot():
         self.chat_id = chat_id
         meli_answer = self.meli.formatJSON(self.meli.searchProduct(msg))
         self.total = len(meli_answer)
-        print('este es el item ' + str(current_item))
-        print('este es meli ' + str(meli_answer))
+        # print('este es el item ' + str(current_item))
+        # print('este es meli ' + str(meli_answer))
         if meli_answer[current_item]:
             message = meli_answer[current_item]["link"] + "\n"
             message += "Su calificación según los usuarios es " + str(meli_answer[current_item]["reviews"]["rating_average"]) + "/5"
@@ -81,7 +87,6 @@ class Chatbot():
             message += "Su precio es de: $" + str(meli_answer[current_item]["price"])
             self.bot.sendMessage(chat_id, message)
             self.bot.sendPhoto(chat_id, meli_answer[current_item]["photo"]);
-            # self.bot.sendMessage(self.chat_id, message, parse_mode= "Markdown")
         else:
             "no hay"
         # self.bot.sendMessage(self.chat_id, meli_answer[0] if meli_answer else 'no hay')
