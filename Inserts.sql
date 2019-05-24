@@ -157,3 +157,6 @@ INSERT INTO `mydb`.`Movimiento` (`Tipo`, `Fecha`, `Monto`, `Concepto`, `idUsuari
 INSERT INTO `mydb`.`Movimiento` (`Tipo`, `Fecha`, `Monto`, `Concepto`, `idUsuario_FK`) VALUES ('Egreso', '2019-10-15', 22, 'Luz', 851288992);
 INSERT INTO `mydb`.`Movimiento` (`Tipo`, `Fecha`, `Monto`, `Concepto`, `idUsuario_FK`) VALUES ('Egreso', '2019-11-15', 21, 'Luz', 851288992);
 INSERT INTO `mydb`.`Movimiento` (`Tipo`, `Fecha`, `Monto`, `Concepto`, `idUsuario_FK`) VALUES ('Egreso', '2019-12-15', 25, 'Luz', 851288992);
+
+
+

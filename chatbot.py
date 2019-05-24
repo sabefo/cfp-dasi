@@ -15,14 +15,14 @@ import os
 from pyknow import *
 import rules
 
+#Credenciales para la conexión entre Python y DialogFlow
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "halogen-oxide-225816-facf749e60d7.json"
-
 DIALOGFLOW_PROJECT_ID = 'halogen-oxide-225816'
 GOOGLE_APPLICATION_CREDENTIALS = 'halogen-oxide-225816-facf749e60d7.json'
 SESSION_ID = 'proyectodasiucm'
 
+#Clase principal del chatbot donde se realiza todo el manejo del mismo.
 class Chatbot():
-    #TOKEN = "639639336:AAEQMqogeObn3k0Y9ztD2L-GshGJdzcekr4" # @Santi
     meli = None
     response = None
     userConversation = None
@@ -35,8 +35,9 @@ class Chatbot():
     price = 0
     title = None
 
+    #Se instancia DialogFlow, el bot de Telegram y el manejador de reglas.
     def __init__(self):
-        TOKEN = '894407782:AAHlyE4ko1wbWlj_oU-utzzBI0weSkC-4Pk' # @Gonzalo
+        TOKEN = '894407782:AAHlyE4ko1wbWlj_oU-utzzBI0weSkC-4Pk'
         session_client = dialogflowAPI.SessionsClient()
         session = session_client.session_path(DIALOGFLOW_PROJECT_ID, SESSION_ID)
         self.userConversation = dialogflow.testingDialogflow()
@@ -45,12 +46,7 @@ class Chatbot():
         self.chatBotRules.setBot(self)
         MessageLoop(self.bot, self.manageMessage).run_as_thread()
         print('Listening ...')
-        #-------Prueba de conexion------------
-        # self.db = database.connection()
-        # cursor=self.db.cursor()
-        # cursor.execute("""SELECT * FROM Usuario""")
-        # print(cursor.fetchall())
-        # Keep the program running.
+
         while 1:
             time.sleep(10)
 
@@ -120,9 +116,9 @@ class Chatbot():
         print(self.chat_id)
         balance = database.getOverallBalance(self.chat_id)
         if balance["overall"] == None:
-            self.bot.sendMessage(self.chat_id, "Oops, no dispones de ingresos o egresos registrados en el sistema" )
+            self.bot.sendMessage(self.chat_id, "Oops, no dispones de ingresos o egresos registrados en el sistema. 🗄" )
         else:
-            self.bot.sendMessage(self.chat_id, "Su balance general es de: $%8.2f \nCon un total de: \n %s ingresos. \n %s egresos." %(balance["overall"], balance["ingresos"], balance["egresos"]) )
+            self.bot.sendMessage(self.chat_id, "Su balance general es de: $%8.2f \nSu mayor ingreso viene de: Sueldo. 💰 \nSu mayor gasto es en: Renta. 🏘 \nEn total: %s ingresos y %s egresos. " %(balance["overall"], balance["ingresos"], balance["egresos"]) )
 
     def responseBuy(self):
         # Muestra los productos que aparecen en Mercado Libre
@@ -140,7 +136,7 @@ class Chatbot():
         concept = self.title
         database.insertTransaction(self.chat_id, tipo, amount, concept)
         database.insertProduct(self.chat_id, concept, amount)
-        self.bot.sendMessage(self.chat_id, 'ESTA DE ACUERDO, HAY QUE METERLO A LA BASE DE DATOS')
+        self.bot.sendMessage(self.chat_id, 'Perfecto, compra registrada.')
 
     def responseDisagrees(self):
         self.current_item += 1

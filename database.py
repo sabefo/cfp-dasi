@@ -15,7 +15,7 @@ import time
 def connection():
     conn = MySQLdb.connect(host= "localhost",
                            user="root",
-                           passwd="",
+                           passwd="root",
                            db="mydb")
     return conn
 
