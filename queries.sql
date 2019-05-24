@@ -5,15 +5,13 @@ drop table mydb.usuario;
 
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Usuario` (
-  `idUsuario` INT NOT NULL AUTO_INCREMENT,
   `Nombre` VARCHAR(45) NOT NULL,
   `Apellido_1` VARCHAR(45) NOT NULL,
   `Apellido_2` VARCHAR(45) NOT NULL,
   `DNI` VARCHAR(45) NOT NULL,
-  `telegramUserID` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idUsuario`),
-  UNIQUE INDEX `telegramUserID_UNIQUE` (`telegramUserID` ASC) VISIBLE,
-  UNIQUE INDEX `DNI_UNIQUE` (`DNI` ASC) VISIBLE)
+  `telegramUserID` INT NOT NULL,
+  UNIQUE INDEX `DNI_UNIQUE` (`DNI` ASC) VISIBLE,
+  PRIMARY KEY (`telegramUserID`))
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Compra` (
@@ -24,10 +22,10 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Compra` (
   `Plazos` INT NULL,
   `idUsuario_FK` INT NOT NULL,
   PRIMARY KEY (`idCompra`),
-  INDEX `idUsuario_FK_idx` (`idUsuario_FK` ASC) VISIBLE,
-  CONSTRAINT `idUsuario_FK`
+  INDEX `idUser_FK_idx` (`idUsuario_FK` ASC) VISIBLE,
+  CONSTRAINT `idUser_FK`
     FOREIGN KEY (`idUsuario_FK`)
-    REFERENCES `mydb`.`Usuario` (`idUsuario`)
+    REFERENCES `mydb`.`Usuario` (`telegramUserID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -58,9 +56,9 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Movimiento` (
   `idUsuario_FK` INT NULL,
   PRIMARY KEY (`idMovimiento`),
   INDEX `idUsuario_FK_idx` (`idUsuario_FK` ASC) VISIBLE,
-  CONSTRAINT `idUsuarioM_FK`
+  CONSTRAINT `idUsuario_FK`
     FOREIGN KEY (`idUsuario_FK`)
-    REFERENCES `mydb`.`Usuario` (`idUsuario`)
+    REFERENCES `mydb`.`Usuario` (`telegramUserID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -72,7 +70,3 @@ INSERT INTO `mydb`.`Usuario` (`Nombre`, `Apellido_1`, `Apellido_2`, `DNI`, `tele
 INSERT INTO `mydb`.`Usuario` (`Nombre`, `Apellido_1`, `Apellido_2`, `DNI`, `telegramUserId`) VALUES ('Santiago', 'Bermudez', 'Fortes', '12735395A', '851288992');
 
 
-
-
-
-SELECT sum(CASE Tipo WHEN 'Ingreso' THEN (monto) WHEN 'Egreso' THEN -(monto) END) AS overall_balance, ( select count(tipo) as Ingreso from mydb.movimiento where tipo = 'Ingreso') as Ingreso, (select count(tipo) as Ingreso from mydb.movimiento where tipo = 'Egreso') as Egreso FROM mydb.usuario usuario, mydb.movimiento movimiento where telegramUserID=800282905 and usuario.idUsuario=movimiento.idUsuario_FK ;
