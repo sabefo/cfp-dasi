@@ -13,6 +13,12 @@ class ChatBotRules(KnowledgeEngine):
         # quiero el balance
         self.bot.responseAccountBalance()
 
+    @Rule(Fact(intent='Saludo'))
+    def ruleGreet(self):
+        # saludar al usuario
+        name = self.bot.message['from']['first_name']
+        self.bot.responseGreet(name)
+
     @Rule(Fact(intent='Ingreso'))
     def ruleInsertIncome(self):
         # quiero el balance

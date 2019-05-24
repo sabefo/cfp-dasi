@@ -32,20 +32,17 @@ ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Producto` (
   `idProducto` INT UNSIGNED NOT NULL,
-  `Cod_MercadoLibre` VARCHAR(45) NOT NULL,
   `Nombre` VARCHAR(45) NOT NULL,
   `Precio` FLOAT NOT NULL,
-  `Descripcion` VARCHAR(100) NOT NULL,
-  `idCompra_FK` INT NOT NULL,
+  `idUsuario_FK` INT NOT NULL,
   PRIMARY KEY (`idProducto`),
-  INDEX `idCompra_FK_idx` (`idCompra_FK` ASC) VISIBLE,
-  CONSTRAINT `idCompra_FK`
-    FOREIGN KEY (`idCompra_FK`)
-    REFERENCES `mydb`.`Compra` (`idCompra`)
+  INDEX `idUsuario_FK_idx` (`idUsuario_FK` ASC) VISIBLE,
+  CONSTRAINT `idUsuario_FK`
+    FOREIGN KEY (`idUsuario_FK`)
+    REFERENCES `mydb`.`Usuario` (`telegramUserID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
-
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Movimiento` (
   `idMovimiento` INT NOT NULL AUTO_INCREMENT,
@@ -56,12 +53,13 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Movimiento` (
   `idUsuario_FK` INT NULL,
   PRIMARY KEY (`idMovimiento`),
   INDEX `idUsuario_FK_idx` (`idUsuario_FK` ASC) VISIBLE,
-  CONSTRAINT `idUsuario_FK`
+  CONSTRAINT `idUsuario_FK1`
     FOREIGN KEY (`idUsuario_FK`)
     REFERENCES `mydb`.`Usuario` (`telegramUserID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
+
 
 
 ALTER TABLE `mydb`.`Movimiento` ADD CHECK (  `Tipo` IN ('Ingreso', 'Egreso')) ;

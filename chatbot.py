@@ -114,12 +114,14 @@ class Chatbot():
         concepto = self.response["paramsData"]["Concepto"]
         database.insertTransaction(self.chat_id, tipo, monto, concepto)
 
-
     def responseAccountBalance(self):
         # Dar balance de cuenta al usuario
         print(self.chat_id)
         balance = database.getOverallBalance(self.chat_id)
-        self.bot.sendMessage(self.chat_id, "Su balance general es de: $%8.2f \nCon un total de: \n %s ingresos. \n %s egresos." %(balance["overall"], balance["ingresos"], balance["egresos"]) )
+        if balance["overall"] == None:
+            self.bot.sendMessage(self.chat_id, "Oops, no dispones de ingresos o egresos registrados en el sistema" )
+        else:
+            self.bot.sendMessage(self.chat_id, "Su balance general es de: $%8.2f \nCon un total de: \n %s ingresos. \n %s egresos." %(balance["overall"], balance["ingresos"], balance["egresos"]) )
 
     def responseBuy(self):
         # Muestra los productos que aparecen en Mercado Libre
@@ -137,7 +139,9 @@ class Chatbot():
 
     def responseGreet(self, nombre):
         #saludo
-        self.bot.sendMessage(self.chat_id, 'Hola ' + nombre +  '! 😀' )
+        self.bot.sendMessage(self.chat_id, '📣 Hola ' + nombre +  '! 😀' )
 
 if __name__ == '__main__':
     chatbot = Chatbot()
+
+
