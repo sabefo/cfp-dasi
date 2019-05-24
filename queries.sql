@@ -48,7 +48,6 @@ CREATE TABLE IF NOT EXISTS `mydb`.`Producto` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-
 CREATE TABLE IF NOT EXISTS `mydb`.`Movimiento` (
   `idMovimiento` INT NOT NULL AUTO_INCREMENT,
   `Tipo` VARCHAR(45) NOT NULL,

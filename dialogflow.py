@@ -23,12 +23,14 @@ class testingDialogflow:
         intentName = response.query_result.intent.display_name
         allParams = response.query_result.all_required_params_present
         fulfillmentText = response.query_result.fulfillment_text
+        params = response.query_result.parameters.fields
         paramBienes = response.query_result.parameters.fields["Bienes"].string_value
         paramMarca = response.query_result.parameters.fields["Marca"].string_value
         searchFor = paramBienes + " " + paramMarca
         responseDialogFlow = {
             "intent": intentName,
             "allParams": allParams,
+            "params": params,
             "searchText": searchFor,
             "responseText": fulfillmentText
         }

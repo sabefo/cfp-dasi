@@ -31,8 +31,11 @@ class Chatbot():
     total = None
     current_item = 0
     searchText = None
+    params = None
+    price = 0
 
     def __init__(self):
+        # TOKEN = "639639336:AAEQMqogeObn3k0Y9ztD2L-GshGJdzcekr4" # @Santi
         TOKEN = '894407782:AAHlyE4ko1wbWlj_oU-utzzBI0weSkC-4Pk' # @Gonzalo
         session_client = dialogflowAPI.SessionsClient()
         session = session_client.session_path(DIALOGFLOW_PROJECT_ID, SESSION_ID)
@@ -81,8 +84,8 @@ class Chatbot():
         self.chat_id = chat_id
         meli_answer = self.meli.formatJSON(self.meli.searchProduct(msg))
         self.total = len(meli_answer)
-        print('este es el item ' + str(current_item))
-        # print('este es meli ' + str(meli_answer))
+        self.params = self.response["params"]
+        pprint.pprint(meli_answer)
         if self.total == 0:
             "No hay ese tipo de producto"
         elif current_item <= self.total and meli_answer[current_item]:
@@ -91,6 +94,7 @@ class Chatbot():
                 message += "Su calificación según los usuarios es " + str(meli_answer[current_item]["reviews"]["rating_average"]) + "/5"
                 message += " de un total de " + str(meli_answer[current_item]["reviews"]["total"]) + " evaluaciones" + " \n"
             message += "Su precio es de: $" + str(meli_answer[current_item]["price"])
+            self.price = meli_answer[current_item]["price"]
             self.bot.sendMessage(chat_id, message)
             self.bot.sendPhoto(chat_id, meli_answer[current_item]["photo"]);
 
@@ -109,15 +113,15 @@ class Chatbot():
         if self.response["allParams"]:
             self.searchText = self.response["searchText"]
             self.current_item = 0
-            print(self.response["searchText"])
+            # print(self.response)
             self.contactMercadoLibre(self.chat_id, self.searchText, self.current_item)
         # self.bot.sendMessage(self.chat_id, 'AQUI VAN LAS COMPRAS')
 
     def responseAgrees(self):
+        print(self.params)
         self.bot.sendMessage(self.chat_id, 'ESTA DE ACUERDO, HAY QUE METERLO A LA BASE DE DATOS')
 
     def responseDisagrees(self):
-        self.bot.sendMessage(self.chat_id, 'NO LE GUSTA, HAY QUE MOSTRAR OTRO')
         self.current_item += 1
         self.contactMercadoLibre(self.chat_id, self.searchText, self.current_item)
 

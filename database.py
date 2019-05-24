@@ -41,7 +41,7 @@ def getOverallBalance(chat_id):
     balanceInfo = {}
     conn = connection()
     x = conn.cursor()
-    query = "SELECT sum(CASE Tipo WHEN 'Ingreso' THEN (monto) WHEN 'Egreso' THEN -(monto) END) AS overall_balance, ( select count(tipo) as Ingreso from mydb.movimiento where tipo = 'Ingreso') as Ingreso, (select count(tipo) as Ingreso from mydb.movimiento where tipo = 'Egreso') as Egreso FROM mydb.usuario usuario, mydb.movimiento movimiento where usuario.idUsuario=movimiento.idUsuario_FK and telegramUserID={0}".format(chat_id)
+    query ="SELECT sum(CASE Tipo WHEN 'Ingreso' THEN (monto) WHEN 'Egreso' THEN -(monto) END) AS overall_balance, (select count(tipo) FROM mydb.usuario usuario, mydb.movimiento movimiento where telegramUserID={0} and usuario.telegramUserID=movimiento.idUsuario_FK and tipo='Ingreso') as ingreso, (select count(tipo) FROM mydb.usuario usuario, mydb.movimiento movimiento where telegramUserID={0} and usuario.telegramUserID=movimiento.idUsuario_FK and tipo='Egreso') as egreso  FROM mydb.usuario usuario, mydb.movimiento movimiento where telegramUserID={0} and usuario.telegramUserID=movimiento.idUsuario_FK".format(chat_id)
     try:
         x.execute(query)
     except MySQLdb.ProgrammingError:
